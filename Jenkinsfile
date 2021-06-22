@@ -50,7 +50,7 @@ node {
           withCredentials([string(credentialsId:'anchore', variable:'anchore_credentials')]){ 
               sh 'echo ${anchore_credentials}'
             writeFile file: anchorefile, text: inputConfig['dockerRegistryHostname'] + "/" + repotag + " " + dockerfile
-            anchore name: anchorefile, engineurl: inputConfig['anchoreEngineUrl'], engineCredentialsId: '${anchore}', annotations: [[key: 'added-by', value: 'jenkins']]
+              anchore name: anchorefile, engineurl: "http://192.168.68.240:8228/v1", engineCredentialsId: "${anchore}", annotations: [[key: 'added-by', value: 'jenkins']]
           }
        }
     }
