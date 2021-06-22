@@ -47,9 +47,11 @@ node {
         }
       },
       Analyze: {
-        writeFile file: anchorefile, text: inputConfig['dockerRegistryHostname'] + "/" + repotag + " " + dockerfile
-        anchore name: anchorefile, engineurl: inputConfig['anchoreEngineUrl'], engineCredentialsId: inputConfig['anchoreEngineCredentials'], annotations: [[key: 'added-by', value: 'jenkins']]
-      }
+          withCredentials([string(credntialsId:'anchore', variable:'anchore_credentials')]){ 
+            writeFile file: anchorefile, text: inputConfig['dockerRegistryHostname'] + "/" + repotag + " " + dockerfile
+            anchore name: anchorefile, engineurl: inputConfig['anchoreEngineUrl'], engineCredentialsId: anchore_credentials, annotations: [[key: 'added-by', value: 'jenkins']]
+          }
+       }
     }
   } finally {
     stage('Cleanup') {
