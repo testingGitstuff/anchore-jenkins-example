@@ -49,7 +49,7 @@ node {
       Analyze: {
           withCredentials([string(credntialsId:'anchore', variable:'anchore_credentials')]){ 
             writeFile file: anchorefile, text: inputConfig['dockerRegistryHostname'] + "/" + repotag + " " + dockerfile
-            anchore name: anchorefile, engineurl: inputConfig['anchoreEngineUrl'], engineCredentialsId: anchore_credentials, annotations: [[key: 'added-by', value: 'jenkins']]
+            anchore name: anchorefile, engineurl: inputConfig['anchoreEngineUrl'], engineCredentialsId: "${ANCHORE_CREDENTIALS}", annotations: [[key: 'added-by', value: 'jenkins']]
           }
        }
     }
