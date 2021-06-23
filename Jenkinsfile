@@ -53,7 +53,7 @@ node {
         }
       },
       Analyze: {
-        writeFile file: anchorefile, text: inputConfig['dockerRegistryHostname'] + "/" + repotag + " " + dockerfile
+        writeFile file: anchorefile, text: dockerRegistryHostname + "/" + repotag + " " + dockerfile
         anchore name: anchorefile, engineurl: anchoreEngineUrl, engineCredentialsId: 'anchore', annotations: [[key: 'added-by', value: 'jenkins']]
       }
     }
