@@ -35,11 +35,13 @@ node {
       path = path.trim()
       dockerfile = path + "/Dockerfile"
       anchorefile = path + "/anchore_images"
+      sh echo "this is the repotag ${path}"
     }
 
     stage('Build') {
       // Build the image and push it to a staging repository
       repotag = inputConfig['dockerRepository'] + ":${BUILD_NUMBER}"
+      sh echo "this is the repotag ${repotag}"
       docker.withRegistry(inputConfig['dockerRegistryUrl'], inputConfig['dockerCredentials']) {
         app = docker.build(repotag)
         app.push()
