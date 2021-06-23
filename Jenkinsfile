@@ -35,7 +35,8 @@ node {
       path = path.trim()
       dockerfile = path + "/Dockerfile"
       anchorefile = path + "/anchore_images"
-      echo "this is the repotag ${path}"
+      echo "this is the path ${path}"
+      echo "this is workspace ${WORKSPACE}"
     }
 
     stage('Build') {
