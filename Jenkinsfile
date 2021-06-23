@@ -25,7 +25,7 @@ node {
   def dockerRegistryUrl = "https://index.docker.io/v1/"
   def dockerRegistryHostname = "docker.io"
   def dockerRepository = "hcheungl3harris/testdummy_anchore"
-  def anchoreEngineUrl = "henry.anchore-testing123.net"
+  def anchoreEngineUrl = "http://henry.anchore-testing123.net:8228/v1"
 
   try {
     stage('Checkout') {
