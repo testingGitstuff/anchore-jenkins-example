@@ -2,7 +2,7 @@
 
 stage('Configure') {
     abort = false
-    inputConfig = input id: 'InputConfig', message: 'Docker registry and Anchore Engine configuration', parameters: [string(defaultValue: 'https://index.docker.io/v1/', description: 'URL of the docker registry for staging images before analysis', name: 'dockerRegistryUrl', trim: true), string(defaultValue: 'docker.io', description: 'Hostname of the docker registry', name: 'dockerRegistryHostname', trim: true), string(defaultValue: 'hcheungl3harris/testdummy_anchore', description: 'Name of the docker repository', name: 'dockerRepository', trim: true), credentials(credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl', defaultValue: '', description: 'Credentials for connecting to the docker registry', name: 'dockerCredentials', required: true), string(defaultValue: '', description: 'Anchore Engine API endpoint', name: 'anchoreEngineUrl', trim: true)]
+    inputConfig = input id: 'InputConfig', message: 'Docker registry and Anchore Engine configuration', parameters: [string(defaultValue: 'https://index.docker.io/v1/', description: 'URL of the docker registry for staging images before analysis', name: 'dockerRegistryUrl', trim: true), string(defaultValue: 'docker.io', description: 'Hostname of the docker registry', name: 'dockerRegistryHostname', trim: true), string(defaultValue: 'hcheungl3harris/testdummy_anchore', description: 'Name of the docker repository', name: 'dockerRepository', trim: true), credentials(credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl', defaultValue: '', description: 'Credentials for connecting to the docker registry', name: 'dockerCredentials', required: true)]
 
     for (config in inputConfig) {
         if (null == config.value || config.value.length() <= 0) {
@@ -22,6 +22,10 @@ node {
   def dockerfile
   def anchorefile
   def repotag
+  def dockerRegistryUrl = "https://index.docker.io/v1/"
+  def dockerRegistryHostname = "docker.io"
+  def dockerRepository = "hcheungl3harris/testdummy_anchore"
+  def anchoreEngineUrl = "henry.anchore-testing123.net"
 
   try {
     stage('Checkout') {
@@ -50,7 +54,7 @@ node {
       },
       Analyze: {
         writeFile file: anchorefile, text: inputConfig['dockerRegistryHostname']+ "/" + repotag + " " + dockerfile
-        anchore name: anchorefile, engineurl: inputConfig['anchoreEngineUrl'], engineCredentialsId: 'anchore', annotations: [[key: 'added-by', value: 'jenkins']]
+        anchore name: anchorefile, engineurl: anchoreEngineUrl, engineCredentialsId: 'anchore', annotations: [[key: 'added-by', value: 'jenkins']]
       }
     }
   } finally {
