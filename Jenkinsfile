@@ -6,7 +6,7 @@ properties([
 
 stage('Configure') {
     abort = false
-    inputConfig = input id: 'InputConfig', message: 'Docker registry and Anchore Engine configuration', parameters: [string(defaultValue: 'https://index.docker.io/v1/', description: 'URL of the docker registry for staging images before analysis', name: 'dockerRegistryUrl', trim: true), string(defaultValue: 'docker.io', description: 'Hostname of the docker registry', name: 'dockerRegistryHostname', trim: true), string(defaultValue: '', description: 'Name of the docker repository', name: 'dockerRepository', trim: true), credentials(credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl', defaultValue: '', description: 'Credentials for connecting to the docker registry', name: 'dockerCredentials', required: true), string(defaultValue: '', description: 'Anchore Engine API endpoint', name: 'anchoreEngineUrl', trim: true)]
+    inputConfig = input id: 'InputConfig', message: 'Docker registry and Anchore Engine configuration', parameters: [string(defaultValue: 'https://index.docker.io/v1/', description: 'URL of the docker registry for staging images before analysis', name: 'dockerRegistryUrl', trim: true), string(defaultValue: 'docker.io', description: 'Hostname of the docker registry', name: 'dockerRegistryHostname', trim: true), credentials(credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl', defaultValue: '', description: 'Credentials for connecting to the docker registry', name: 'dockerCredentials', required: true), string(defaultValue: '', description: 'Anchore Engine API endpoint', name: 'anchoreEngineUrl', trim: true)]
 
     echo "${anchoreEngineCredentials} is the thing"
     for (config in inputConfig) {
@@ -54,8 +54,8 @@ node {
         }
       },
       Analyze: {
-        writeFile file: anchorefile, text: inputConfig['dockerRegistryHostname'] + "/" + repotag + " " + dockerfile
-        anchore name: anchorefile, engineurl: inputConfig['anchoreEngineUrl'], engineCredentialsId: anchoreEngineCredentials, annotations: [[key: 'added-by', value: 'jenkins']]
+        writeFile file: anchorefile, text: "hcheungl3harris/testdummy_anchore" + "/" + repotag + " " + dockerfile
+        anchore name: anchorefile, engineurl: inputConfig['anchoreEngineUrl'], engineCredentialsId: 'anchore', annotations: [[key: 'added-by', value: 'jenkins']]
       }
     }
   } finally {
