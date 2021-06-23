@@ -1,8 +1,4 @@
-properties([
-  parameters([
-    anchoreEngineCredentials = credentials('anchore')
-  ])
-])
+
 
 stage('Configure') {
     abort = false
