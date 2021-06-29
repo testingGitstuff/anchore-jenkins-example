@@ -2,7 +2,8 @@
 
 stage('Configure') {
     abort = false
-    inputConfig = input id: 'InputConfig', message: 'Docker registry and Anchore Engine configuration', parameters: [string(defaultValue: 'docker.io', description: 'Hostname of the docker registry', name: 'dockerRegistryHostname', trim: true), string(defaultValue: 'hcheungl3harris/testdummy_anchore', description: 'Name of the docker repository', name: 'dockerRepository', trim: true), credentials(credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl', defaultValue: '', description: 'Credentials for connecting to the docker registry', name: 'dockerCredentials', required: true)]
+    inputConfig = input id: 'InputConfig', message: 'Docker registry and Anchore Engine configuration', parameters: 
+	[string(defaultValue: 'docker.io', description: 'Hostname of the docker registry', name: 'dockerRegistryHostname', trim: true), string(defaultValue: 'hcheungl3harris/testdummy_anchore', description: 'Name of the docker repository', name: 'dockerRepository', trim: true), credentials(credentialType: 'com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl', defaultValue: '', description: 'Credentials for connecting to the docker registry', name: 'dockerCredentials', required: true)]
 
     for (config in inputConfig) {
         if (null == config.value || config.value.length() <= 0) {
@@ -41,9 +42,9 @@ node {
 
     stage('Build') {
       // Build the image and push it to a staging repository
-      repotag = inputConfig['dockerRepository'] + ":${BUILD_NUMBER}"
+      repotag = dockerRepository + ":${BUILD_NUMBER}"
       echo "this is the repotag ${repotag}"
-      docker.withRegistry(inputConfig['dockerRegistryUrl'], inputConfig['dockerCredentials']) {
+      docker.withRegistry(dockerRegistryUrl, inputConfig['dockerCredentials']) {
         app = docker.build(repotag)
         app.push()
       }
